@@ -11,6 +11,7 @@ let renderer,
     count = 0,
     t = 0,
     mouseX = 0;
+    mouseY = 0;
 
 /*   Lines values  */
 let lineTotal = 1000;
@@ -55,13 +56,13 @@ function init() {
         fog: false
     });
     planet = new THREE.Mesh(planetGeometry, planetMaterial);
-    planet.position.set(0, 8, -30);
+    planet.position.set(0, 8, 0);
     scene.add(planet);
 
     //Moon
     const textureMoon = loader.load('moon.jpg');
     textureMoon.anisotropy = 16;
-    let moonGeometry = new THREE.SphereBufferGeometry(2, 32, 32);
+    let moonGeometry = new THREE.SphereBufferGeometry(1, 16, 16);
     let moonMaterial = new THREE.MeshPhongMaterial({
         map: textureMoon,
         fog: false
@@ -94,7 +95,7 @@ function init() {
     terrain = new THREE.Mesh(terrainGeometry, terrainMaterial);
     terrain.rotation.x = -0.47 * Math.PI;
     terrain.rotation.z = THREE.Math.degToRad(90);
-    scene.add(terrain);
+    // scene.add(terrain);
 
     let t_vertex_Array = terrainGeometry.getAttribute("position").array;
     terrainGeometry.getAttribute("position").setUsage(THREE.DynamicDrawUsage);
@@ -116,7 +117,7 @@ function init() {
     );
     terrain_line.rotation.x = -0.47 * Math.PI;
     terrain_line.rotation.z = THREE.Math.degToRad(90);
-    scene.add(terrain_line);
+    // scene.add(terrain_line);
 
     //  Stars
     for (let i = 0; i < lineTotal; i++) {
@@ -148,6 +149,7 @@ function init() {
 function onMouseMove(event) {
     // Normalize mouseX to be between -1 and 1
     mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+    mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
 }
 
 function animate() {
@@ -159,8 +161,8 @@ function animate() {
     // Moon Animation
     moon.rotation.y -= 0.007;
     moon.rotation.x -= 0.007;
-    moon.position.x = 15 * Math.cos(t) + 0;
-    moon.position.z = 20 * Math.sin(t) - 35;
+    moon.position.x = 30 * Math.cos(t) + 0;
+    moon.position.z = 30 * Math.sin(t) + 0;
     t += 0.015;
 
     // Terrain Animation  
@@ -191,7 +193,8 @@ function animate() {
     }
 
     // Camera Movement based on mouseX
-    camera.position.x = mouseX * 18;
+    camera.position.x = mouseX * 50;
+    camera.position.y = mouseY * 50;
     camera.lookAt(0, 0, 0);
 
     l_positionAttr.needsUpdate = true;
